@@ -1,0 +1,256 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "4ba045a5-8a08-43b6-b06d-eb912c496d3b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "All course libraries successfully imported!\n"
+     ]
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import torch\n",
+    "import matminer\n",
+    "print(\"All course libraries successfully imported!\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "ebff4707-c214-44e0-a6d4-3f7eda35d9fc",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: matminer in d:\\anaconda\\lib\\site-packages (0.10.1)Note: you may need to restart the kernel to use updated packages.\n",
+      "\n",
+      "Requirement already satisfied: numpy>=1.23 in d:\\anaconda\\lib\\site-packages (from matminer) (2.5.1)\n",
+      "Requirement already satisfied: requests~=2.31 in d:\\anaconda\\lib\\site-packages (from matminer) (2.34.2)\n",
+      "Requirement already satisfied: pandas<3,>=1.5 in d:\\anaconda\\lib\\site-packages (from matminer) (2.2.2)\n",
+      "Requirement already satisfied: tqdm~=4.66 in d:\\anaconda\\lib\\site-packages (from matminer) (4.69.1)\n",
+      "Requirement already satisfied: pymongo~=4.5 in d:\\anaconda\\lib\\site-packages (from matminer) (4.17.0)\n",
+      "Requirement already satisfied: scikit-learn~=1.3 in d:\\anaconda\\lib\\site-packages (from matminer) (1.5.1)\n",
+      "Requirement already satisfied: sympy~=1.11 in d:\\anaconda\\lib\\site-packages (from matminer) (1.14.0)\n",
+      "Requirement already satisfied: monty>=2023 in d:\\anaconda\\lib\\site-packages (from matminer) (2026.7.16)\n",
+      "Requirement already satisfied: pymatgen>=2023 in d:\\anaconda\\lib\\site-packages (from matminer) (2026.5.4)\n",
+      "Requirement already satisfied: scipy>=1.17.0 in d:\\anaconda\\lib\\site-packages (from matminer) (1.18.0)\n",
+      "Requirement already satisfied: ruamel.yaml in d:\\anaconda\\lib\\site-packages (from monty>=2023->matminer) (0.18.6)\n",
+      "Requirement already satisfied: python-dateutil>=2.8.2 in d:\\anaconda\\lib\\site-packages (from pandas<3,>=1.5->matminer) (2.9.0.post0)\n",
+      "Requirement already satisfied: pytz>=2020.1 in d:\\anaconda\\lib\\site-packages (from pandas<3,>=1.5->matminer) (2024.1)\n",
+      "Requirement already satisfied: tzdata>=2022.7 in d:\\anaconda\\lib\\site-packages (from pandas<3,>=1.5->matminer) (2023.3)\n",
+      "Requirement already satisfied: pymatgen-core>=2026.4.16 in d:\\anaconda\\lib\\site-packages (from pymatgen>=2023->matminer) (2026.7.16)\n",
+      "Requirement already satisfied: dnspython<3.0.0,>=2.6.1 in d:\\anaconda\\lib\\site-packages (from pymongo~=4.5->matminer) (2.8.0)\n",
+      "Requirement already satisfied: charset_normalizer<4,>=2 in d:\\anaconda\\lib\\site-packages (from requests~=2.31->matminer) (3.3.2)\n",
+      "Requirement already satisfied: idna<4,>=2.5 in d:\\anaconda\\lib\\site-packages (from requests~=2.31->matminer) (3.7)\n",
+      "Requirement already satisfied: urllib3<3,>=1.26 in d:\\anaconda\\lib\\site-packages (from requests~=2.31->matminer) (2.2.3)\n",
+      "Requirement already satisfied: certifi>=2023.5.7 in d:\\anaconda\\lib\\site-packages (from requests~=2.31->matminer) (2024.8.30)\n",
+      "Requirement already satisfied: joblib>=1.2.0 in d:\\anaconda\\lib\\site-packages (from scikit-learn~=1.3->matminer) (1.4.2)\n",
+      "Requirement already satisfied: threadpoolctl>=3.1.0 in d:\\anaconda\\lib\\site-packages (from scikit-learn~=1.3->matminer) (3.5.0)\n",
+      "Requirement already satisfied: mpmath<1.4,>=1.1.0 in d:\\anaconda\\lib\\site-packages (from sympy~=1.11->matminer) (1.3.0)\n",
+      "Requirement already satisfied: colorama in d:\\anaconda\\lib\\site-packages (from tqdm~=4.66->matminer) (0.4.6)\n",
+      "Requirement already satisfied: bibtexparser in d:\\anaconda\\lib\\site-packages (from pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (1.4.4)\n",
+      "Requirement already satisfied: lxml>=6.1.0 in d:\\anaconda\\lib\\site-packages (from pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (6.1.1)\n",
+      "Requirement already satisfied: matplotlib>=3.8 in d:\\anaconda\\lib\\site-packages (from pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (3.9.2)\n",
+      "Requirement already satisfied: networkx>=2.7 in d:\\anaconda\\lib\\site-packages (from pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (3.3)\n",
+      "Requirement already satisfied: orjson<4,>=3.10 in d:\\anaconda\\lib\\site-packages (from pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (3.11.9)\n",
+      "Requirement already satisfied: palettable>=3.3.3 in d:\\anaconda\\lib\\site-packages (from pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (3.3.3)\n",
+      "Requirement already satisfied: plotly>=5.0 in d:\\anaconda\\lib\\site-packages (from pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (5.24.1)\n",
+      "Requirement already satisfied: spglib>=2.5 in d:\\anaconda\\lib\\site-packages (from pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (2.7.0)\n",
+      "Requirement already satisfied: tabulate>=0.9.0 in d:\\anaconda\\lib\\site-packages (from pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (0.9.0)\n",
+      "Requirement already satisfied: uncertainties>=3.1 in d:\\anaconda\\lib\\site-packages (from pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (3.2.3)\n",
+      "Requirement already satisfied: six>=1.5 in d:\\anaconda\\lib\\site-packages (from python-dateutil>=2.8.2->pandas<3,>=1.5->matminer) (1.16.0)\n",
+      "Requirement already satisfied: ruamel.yaml.clib>=0.2.7 in d:\\anaconda\\lib\\site-packages (from ruamel.yaml->monty>=2023->matminer) (0.2.8)\n",
+      "Requirement already satisfied: contourpy>=1.0.1 in d:\\anaconda\\lib\\site-packages (from matplotlib>=3.8->pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (1.3.3)\n",
+      "Requirement already satisfied: cycler>=0.10 in d:\\anaconda\\lib\\site-packages (from matplotlib>=3.8->pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (0.11.0)\n",
+      "Requirement already satisfied: fonttools>=4.22.0 in d:\\anaconda\\lib\\site-packages (from matplotlib>=3.8->pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (4.51.0)\n",
+      "Requirement already satisfied: kiwisolver>=1.3.1 in d:\\anaconda\\lib\\site-packages (from matplotlib>=3.8->pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (1.4.4)\n",
+      "Requirement already satisfied: packaging>=20.0 in d:\\anaconda\\lib\\site-packages (from matplotlib>=3.8->pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (24.1)\n",
+      "Requirement already satisfied: pillow>=8 in d:\\anaconda\\lib\\site-packages (from matplotlib>=3.8->pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (10.4.0)\n",
+      "Requirement already satisfied: pyparsing>=2.3.1 in d:\\anaconda\\lib\\site-packages (from matplotlib>=3.8->pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (3.1.2)\n",
+      "Requirement already satisfied: tenacity>=6.2.0 in d:\\anaconda\\lib\\site-packages (from plotly>=5.0->pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (8.2.3)\n",
+      "Requirement already satisfied: typing-extensions>=4.9.0 in d:\\anaconda\\lib\\site-packages (from spglib>=2.5->pymatgen-core>=2026.4.16->pymatgen>=2023->matminer) (4.11.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "pip install matminer\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "89a511f0-6590-4189-bab9-71487184e508",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# module 1\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "893655b3-5070-4753-b0d9-8248813eb08a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "694eb8bb-1eb1-46b0-ae8f-eda9f21cbb81",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 1. Define the dictionary with 5 material properties"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "ad331547-6004-4553-939b-cc0a0d3970ad",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "materials_dict = {\n",
+    "    'Element': ['Fe', 'Al', 'Ti'],\n",
+    "    'Atomic_Number': [26, 13, 22],\n",
+    "    'Density_g_cm3': [7.87, 2.70, 4.51],\n",
+    "    'Melting_Point_K': [1811, 933, 1941],\n",
+    "    'Crystal_Structure': ['BCC', 'FCC', 'HCP'],\n",
+    "    'Bandgap_eV': [0.0, 0.0, 0.0] # Metals have no bandgap\n",
+    "}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "8257c4e9-15ca-4dcc-823c-e2e215460970",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 2. Convert the dictionary into a Pandas DataFrame\n",
+    "df = pd.DataFrame(materials_dict)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "b59a2772-a713-43ef-81e1-34621a0c70c2",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "--- DataFrame Head ---\n",
+      "  Element  Atomic_Number  Density_g_cm3  Melting_Point_K Crystal_Structure  \\\n",
+      "0      Fe             26           7.87             1811               BCC   \n",
+      "1      Al             13           2.70              933               FCC   \n",
+      "2      Ti             22           4.51             1941               HCP   \n",
+      "\n",
+      "   Bandgap_eV  \n",
+      "0         0.0  \n",
+      "1         0.0  \n",
+      "2         0.0  \n",
+      "\n",
+      "--- DataFrame Info ---\n",
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 3 entries, 0 to 2\n",
+      "Data columns (total 6 columns):\n",
+      " #   Column             Non-Null Count  Dtype  \n",
+      "---  ------             --------------  -----  \n",
+      " 0   Element            3 non-null      object \n",
+      " 1   Atomic_Number      3 non-null      int64  \n",
+      " 2   Density_g_cm3      3 non-null      float64\n",
+      " 3   Melting_Point_K    3 non-null      int64  \n",
+      " 4   Crystal_Structure  3 non-null      object \n",
+      " 5   Bandgap_eV         3 non-null      float64\n",
+      "dtypes: float64(2), int64(2), object(2)\n",
+      "memory usage: 276.0+ bytes\n",
+      "None\n",
+      "\n",
+      "--- Data Types ---\n",
+      "Element               object\n",
+      "Atomic_Number          int64\n",
+      "Density_g_cm3        float64\n",
+      "Melting_Point_K        int64\n",
+      "Crystal_Structure     object\n",
+      "Bandgap_eV           float64\n",
+      "dtype: object\n",
+      "\n",
+      "--- DataFrame Shape ---\n",
+      "(3, 6)\n",
+      "\n",
+      "--- Statistical Description ---\n",
+      "       Atomic_Number  Density_g_cm3  Melting_Point_K  Bandgap_eV\n",
+      "count       3.000000       3.000000         3.000000         3.0\n",
+      "mean       20.333333       5.026667      1561.666667         0.0\n",
+      "std         6.658328       2.623439       548.307700         0.0\n",
+      "min        13.000000       2.700000       933.000000         0.0\n",
+      "25%        17.500000       3.605000      1372.000000         0.0\n",
+      "50%        22.000000       4.510000      1811.000000         0.0\n",
+      "75%        24.000000       6.190000      1876.000000         0.0\n",
+      "max        26.000000       7.870000      1941.000000         0.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"--- DataFrame Head ---\")\n",
+    "print(df.head())\n",
+    "print(\"\\n--- DataFrame Info ---\")\n",
+    "print(df.info()) \n",
+    "\n",
+    "print(\"\\n--- Data Types ---\")\n",
+    "print(df.dtypes) \n",
+    "\n",
+    "print(\"\\n--- DataFrame Shape ---\")\n",
+    "print(df.shape) \n",
+    "\n",
+    "print(\"\\n--- Statistical Description ---\")\n",
+    "print(df.describe())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4e250e71-74ea-41bc-a145-be1df64a0ec1",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

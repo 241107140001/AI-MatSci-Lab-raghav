@@ -29,6 +29,7 @@
  ├── 📓 Module 1 S04.ipynb
  ├── 📓 Module 1 S05.ipynb
  ├── 📓 Module 1 S06.ipynb
+Module 1 S07
  └── 📄 README.md
 ```
 
@@ -138,7 +139,82 @@
 ✔ Learn professional project management using Git with AI notebooks.
 
 ---
+### Materials Project Data Retrieval & Analysis
 
+This repository contains Python workflows and Jupyter Notebooks designed to securely authenticate, query, and analyze material properties using the [Materials Project API](https://docs.materialsproject.org/) (mp-api). 
+
+### 🛠️ Environment Setup
+
+The notebooks are configured to run inside an Anaconda virtual environment named materials using **Python 3.12**. 
+
+### 1. Install Dependencies
+
+Activate your environment and run the following command to install the required data processing, visualization, and API client libraries: 
+
+bash
+
+pip install mp-api pandas matplotlib seaborn python-dotenv
+
+Use code with caution.
+
+### 2. Secure API Key Configuration
+
+To safeguard your Materials Project credentials, this repository utilizes python-dotenv to manage secret keys without hardcoding them into the codebase. 
+
+1. Create a file named .env in the root folder of this project: 
+
+bash
+
+touch .env
+
+Use code with caution.
+2. Open the .env file and add your official Materials Project API Key: 
+
+env
+
+MP_API_KEY=your_actual_api_key_here
+
+Use code with caution.
+
+### 📂 Repository Structure
+
+### 🔬 Notebook 1: Initialization & Visualizations
+
+* **File:** 01_environment_and_plotting.ipynb
+* **Purpose:** Validates package installation integrity and loads the data visualization baseline.
+* **Core Libraries:** pandas, matplotlib.pyplot, seaborn
+
+### 🔑 Notebook 2: Secure API Authentication
+
+* **File:** 02_api_authentication.ipynb
+* **Purpose:** Sets up environment configuration frameworks and loads the MPRester client securely via environment variables.
+* **Core Libraries:** os, python-dotenv, mp_api.client
+
+### 🚀 Usage Example
+
+Once your .env configuration file is active, you can securely query data through the MPRester context manager client without exposing your token keys: 
+
+python
+
+import os
+from dotenv import load_dotenv
+from mp_api.client import MPRester
+
+# Load environment variables from the .env file
+load_dotenv()
+api_key = os.getenv("MP_API_KEY")
+
+# Query materials safely
+with MPRester(api_key) as mpr:
+    # Example: Search for materials by chemical formula
+    docs = mpr.summary.search(formula="GaAs")
+    print(f"Successfully retrieved {len(docs)} entries for GaAs!")
+
+Use code with caution.
+
+### 📄 License
+
+This project is open-source and available under the [MIT License](LICENSE).
 # 🛠 Technologies Used
 
 | Technology | Purpose |

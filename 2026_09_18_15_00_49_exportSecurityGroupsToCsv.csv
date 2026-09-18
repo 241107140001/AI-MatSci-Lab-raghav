@@ -1,0 +1,2 @@
+GroupId,GroupName,VpcId,Description,OwnerId,InboundRulesCount,OutboundRulesCount,Tags
+sg-08ac201e67e3f2b11,EFS-SG,vpc-0be6e4e844f13c420,Security group for EFS NFS access,795109470637,1,1,
